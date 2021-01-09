@@ -3,9 +3,28 @@ import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
 
+
 mydb = mysql.connector.connect(host = "localhost",
                                user ="root",
-                               database = "school_project",)
+                               )
+
+db = mydb.cursor()
+db.execute("show databases")
+lst = db.fetchall()
+if ("school_project",) in lst :
+    db.execute("use school_project")
+    print("Databasse exists")
+else :
+    db.execute("create database school_project")
+    print("Database created")
+
+db.execute("show tables")
+tbls = db.fetchall()
+if ("inventory",) in tbls :
+    print("Table is present")
+else :
+    print("not present")
+
 
 def clear_button_2_is_clicked():
     Field.delete(*Field.get_children())
