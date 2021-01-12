@@ -31,7 +31,7 @@ else :
     Price varchar(10),
     Quantity varchar(10),
     Company varchar(20),
-    Contact varchar(10),
+    Contact int(10),
     address varchar(30))""")
     print("Table is created")
 
