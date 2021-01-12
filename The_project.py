@@ -15,15 +15,24 @@ if ("school_project",) in lst :
     db.execute("use school_project")
     print("Databasse exists")
 else :
-    db.execute("create database school_project")
-    print("Database created")
+    db.execute("""create database school_project""")
 
 db.execute("show tables")
 tbls = db.fetchall()
 if ("inventory",) in tbls :
+
     print("Table is present")
+    pass
 else :
-    print("not present")
+    db.execute("""create table inventory ( 
+    Product_ID varchar(5) primary key,
+    Product_Name varchar(20),
+    Price varchar(10),
+    Quantity varchar(10),
+    Company varchar(20),
+    Contact varchar(10),
+    address varchar(30))""")
+    print("Table is created")
 
 
 def clear_button_2_is_clicked():
@@ -93,11 +102,10 @@ def search_all_bth():
     select = "select * from inventory "
     cur.execute(select)
     rows = cur.fetchall()
-    if len(rows) != 0 :
-        Field.delete(* Field.get_children())
-        for row in rows :
-            Field.insert('',END,values = row)
-            mydb.commit()
+    Field.delete(* Field.get_children())
+    for row in rows :
+        Field.insert('',END,values = row)
+        mydb.commit()
 
 def delete_button_is_clicked():
 
@@ -257,7 +265,7 @@ y = int(hs / 2 - h / 2 - 30)
 data = str(w) + "x" + str(h) + "+" + str(x) + "+" + str(y)
 root.geometry(data)
 root.configure(bg="#ffffff")
-# root.resizable(0, 0)
+root.resizable(0, 0)
 
 #*************************************Frame 1  (Title)**************
 
