@@ -16,6 +16,7 @@ if ("school_project",) in lst :
     print("Databasse exists")
 else :
     db.execute("""create database school_project""")
+    db.execute("use school_project")
 
 db.execute("show tables")
 tbls = db.fetchall()
@@ -25,7 +26,7 @@ if ("inventory",) in tbls :
     pass
 else :
     db.execute("""create table inventory ( 
-    Product_ID varchar(5) primary key,
+    Product_ID int(5) primary key,
     Product_Name varchar(20),
     Price varchar(10),
     Quantity varchar(10),
