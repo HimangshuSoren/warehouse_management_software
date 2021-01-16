@@ -1,8 +1,8 @@
-import mysql.connector
-import tkinter.messagebox
+import tkinter
 from tkinter import *
-from tkinter import ttk
-
+from tkinter import messagebox,ttk
+import mysql.connector
+import os
 
 mydb = mysql.connector.connect(host = "localhost",
                                user ="root",
@@ -13,10 +13,11 @@ db.execute("show databases")
 lst = db.fetchall()
 if ("school_project",) in lst :
     db.execute("use school_project")
-    print("Databasse exists")
+    print("Database exists")
 else :
     db.execute("""create database school_project""")
     db.execute("use school_project")
+    print("Database created")
 
 db.execute("show tables")
 tbls = db.fetchall()
@@ -31,7 +32,7 @@ else :
     Price varchar(10),
     Quantity varchar(10),
     Company varchar(20),
-    Contact int(10),
+    Contact varchar(10),
     address varchar(30))""")
     print("Table is created")
 
@@ -56,8 +57,6 @@ def search_button_is_clicked():
         for row in rows:
             Field.insert('', END, values=row)
             mydb.commit()
-
-
 
 def update_2_is_clicked():
     cursor_row = Field.focus()
@@ -86,7 +85,6 @@ def add_btn():
              )
     cur.execute(insert,values)
     mydb.commit()
-
 
     cur = mydb.cursor()
     select = "select * from inventory"
@@ -161,8 +159,12 @@ def update_button_is_clicked():
             Field.insert('', END, values=row)
             mydb.commit()
 
-
-
+def logout_button_is_clicked():
+    root.destroy()
+    try:
+        os.startfile("Pro_1.pyw")
+    except Exception as e:
+        print("s")
 
 def product_details():
     pop = Toplevel()
@@ -200,8 +202,6 @@ def product_details():
 
     label7 = Label(pop, text=(f"Address"), bg="#ffffff", anchor=W, font=("Times New Roman", 22, "bold"))
     label7.grid(row=6, column=0, sticky="w", padx=30, pady=(0, 0))
-
-
 
     label8 = Label(pop, text=(f":    {row[0]}"), bg="#ffffff",fg = "#676767", anchor=W,
                    font=("Times New Roman", 19, "bold"))
@@ -254,7 +254,6 @@ def product_details():
                     font=("Times New Roman", 22, "bold"))
     label21.grid(row=6, column=1, sticky="w", )
 
-
 root = tkinter.Tk()
 root.title("Warehouse Inventory Sales Purchase Management System   \U0001f130 \U0001f131 \U0001f137")
 ws = root.winfo_screenwidth()
@@ -270,7 +269,7 @@ root.resizable(0, 0)
 
 #*************************************Frame 1  (Title)**************
 
-title_frame = LabelFrame()
+title_frame = LabelFrame(root)
 title_frame.pack(fill="x")
 
 title = Label(title_frame,
@@ -368,8 +367,8 @@ update_btn = Button(button_frame1, width=10, text="Update", font=("Comic Sans MS
 clear_btn = Button(button_frame1, width=10, text="Clear", font=("Comic Sans MS", 12, "bold"), bd=1 / 2,
                             bg="#ffffff", fg="#000000", relief=SUNKEN,command = clear_button_is_clicked).grid(row=0, column=2, padx=2, pady=7)
 
-cancel_btn = Button(button_frame1, width=10, text="Cancel", font=("Comic Sans MS", 12, "bold"), bd=1 / 2, bg="#ffffff",
-                           fg="#000000", relief=SUNKEN,command =clear_button_is_clicked).grid(row=0, column=3, padx=2, pady=7)
+Logout_btn = Button(button_frame1, width=10, text="Logout", font=("Comic Sans MS", 12, "bold"), bd=1 / 2, bg="#ffffff",
+                           fg="#000000", relief=SUNKEN,command =logout_button_is_clicked).grid(row=0, column=3, padx=2, pady=7)
 
 #*********************************************Frame 4 ( For Management ) ************************
 
