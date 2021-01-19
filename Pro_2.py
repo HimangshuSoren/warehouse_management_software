@@ -162,7 +162,7 @@ def update_button_is_clicked():
 def logout_button_is_clicked():
     root.destroy()
     try:
-        os.startfile("Pro_1.pyw")
+        os.startfile("Pro_1.py")
     except Exception as e:
         print("s")
 
@@ -255,7 +255,7 @@ def product_details():
     label21.grid(row=6, column=1, sticky="w", )
 
 root = tkinter.Tk()
-root.title("Warehouse Inventory Sales Purchase Management System   \U0001f130 \U0001f131 \U0001f137")
+root.title("Warehouse Inventory Sales Purchase Management System  ")
 ws = root.winfo_screenwidth()
 hs = root.winfo_screenheight()
 w = 1350

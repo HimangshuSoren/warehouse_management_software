@@ -38,12 +38,20 @@ def sign_up_page():
     root.destroy()
     try:
         os.startfile("Pro_3.py")
+
     except Exception as e:
         print ("s")
 
 def open_pro():
     try:
-        os.startfile("Pro_2.pyw")
+        os.startfile("Pro_2.py")
+    except Exception as e:
+        print ("s")
+
+def forgot_pass():
+    root.destroy()
+    try:
+        os.startfile("Pro_4.py")
     except Exception as e:
         print ("s")
 
@@ -79,7 +87,7 @@ def login():
    *********************************************************************************'''
 
 root = tkinter.Tk()
-root.title("Warehouse Inventory Sales Purchase Management System   \U0001f130 \U0001f131 \U0001f137")
+root.title("Warehouse Inventory Sales Purchase Management System  ")
 ws = root.winfo_screenwidth()
 hs = root.winfo_screenheight()
 w = 1350
@@ -120,7 +128,7 @@ title_pass.place(x = 90,y = 231)
 enter_pass= Entry (frame_login,font =("Times New Roman",15,),bg = "#ffffff",cursor = "hand2")
 enter_pass.place(x = 90,y = 265,width =350 , height = 35)
 
-forget_password = Button(frame_login, text = "Forget password ?",bd =0,bg ="#ffffff",fg = "#d77337",font =("Times New Roman",12),relief =GROOVE,cursor = "hand2")
+forget_password = Button(frame_login, text = "Forget password ?",bd =0,bg ="#ffffff",fg = "#d77337",font =("Times New Roman",12),relief =GROOVE,cursor = "hand2",command = forgot_pass)
 forget_password.place(x =90,y =300 )
 
 log_in_btn= Button(frame_login, text = "Log In",bd =0,fg = "#ffffff",bg = "#d77337" ,font =("Impact",42,),relief =FLAT,cursor = "hand2",command =login)

@@ -13,29 +13,39 @@ db1.execute("use accounts")
 def login_page():
     root.destroy()
     try:
-        os.startfile("Pro_1.pyw")
+        os.startfile("Pro_1.py")
     except Exception as e:
         print("s")
 
 def enter_new_usr():
     cur = mydb.cursor()
-    insert = "INSERT INTO users values (%s,%s,%s,%s,%s,%s)"
-    values = (
-              FName.get()+""+LName.get(),
-              USRName.get(),
-              E_mail.get(),
-              Pass.get(),
-              Security_Q.get(),
-              Security_A.get(),
-              )
-    cur.execute(insert,values)
-    mydb.commit()
-    print("Done")
-    messagebox.showinfo("Information",message ="Your account has been created now you will be redirected to the Login Page")
-    login_page()
+    cur.execute("select Username, E_mail from users")
+    f = cur.fetchall()
+    if USRName.get() in f :
+
+        messagebox.showinfo("error",message="this username had already been taken")
+        pass
+    elif Pass1.get() != Pass2.get() :
+        messagebox.showinfo("error",message="Password doesn't match")
+        pass
+    else :
+        insert = "INSERT INTO users values (%s,%s,%s,%s,%s,%s)"
+        values = (
+                FName.get()+" "+LName.get(),
+                USRName.get(),
+                E_mail.get(),
+                Pass1.get(),
+                Security_Q.get(),
+                Security_A.get(),
+                )
+        cur.execute(insert,values)
+        mydb.commit()
+        print("Done")
+        messagebox.showinfo("Information",message ="Your account has been created now you will be redirected to the Login Page")
+        login_page()
 
 root = tkinter.Tk()
-root.title("Warehouse Inventory Sales Purchase Management System   \U0001f130 \U0001f131 \U0001f137")
+root.title("Warehouse Inventory Sales Purchase Management System   ")
 ws = root.winfo_screenwidth()
 hs = root.winfo_screenheight()
 w = 1350
@@ -45,7 +55,6 @@ y = int(hs / 2 - h / 2 - 30)
 data = str(w) + "x" + str(h) + "+" + str(x) + "+" + str(y)
 root.geometry(data)
 root.configure(bg="#ffffff")
-# root.resizable(0,0)
 background = ImageTk.PhotoImage(file = r"image5.jpg")
 bgmage_label = Label(root,image = background).place(x = 0,y = 0,relwidth =1,relheight = 1)
 
@@ -63,7 +72,8 @@ FName = StringVar()
 LName = StringVar()
 USRName = StringVar()
 E_mail = StringVar()
-Pass = StringVar()
+Pass1 = StringVar()
+Pass2 = StringVar()
 Security_Q= StringVar()
 Security_A = StringVar()
 
@@ -87,14 +97,14 @@ E_mail_Label.place(x = 35,y = 320)
 E_mail_Entry= Entry (frame_login,font =("Times New Roman",15,),textvariable =E_mail,bg = "#ffffff",cursor = "hand2")
 E_mail_Entry.place(x = 35,y = 350,width =300 , height = 35)
 
-Pass_Label= Label (frame_login,text = "Enter Password",bg = "#ffffff",fg="gray",font =("Goudy old style",15,))
-Pass_Label.place(x = 355,y = 80)
-Pass_Entry= Entry (frame_login,font =("Times New Roman",15,),textvariable =Pass,show = "*",bg = "#ffffff",cursor = "hand2")
-Pass_Entry.place(x = 355,y = 110,width =300 , height = 35)
+Pass1_Label= Label (frame_login,text = "Enter Password",bg = "#ffffff",fg="gray",font =("Goudy old style",15,))
+Pass1_Label.place(x = 355,y = 80)
+Pass1_Entry= Entry (frame_login,font =("Times New Roman",15,),textvariable =Pass1,show = "*",bg = "#ffffff",cursor = "hand2")
+Pass1_Entry.place(x = 355,y = 110,width =300 , height = 35)
 
 Pass_2_Label= Label (frame_login,text = "Re-enter Password",bg = "#ffffff",fg="gray",font =("Goudy old style",15,))
 Pass_2_Label.place(x = 355,y = 160)
-Pass_2_Entry= Entry (frame_login,font =("Times New Roman",15,),bg = "#ffffff",cursor = "hand2")
+Pass_2_Entry= Entry (frame_login,font =("Times New Roman",15,),textvariable =Pass2,bg = "#ffffff",cursor = "hand2")
 Pass_2_Entry.place(x = 355,y = 190,width =300 , height = 35)
 
 Security_Q_Label= Label (frame_login,text = "Security Question",bg = "#ffffff",fg="gray",font =("Goudy old style",15,))
@@ -110,7 +120,7 @@ Security_A_Entry.place(x = 355,y = 350,width =300 , height = 35)
 Create_btn= Button(frame_login, text = "Create account",bd =0,fg = "#ffffff",bg = "#00d30b" ,font =("Times New Roman",20,"bold"),relief =SUNKEN,cursor = "hand2",command = enter_new_usr)
 Create_btn.place(x =395,y =400,width = 230,height = 40 )
 
-Sign_up_btn_2= Button(frame_login1, text = "Log In",bd =0,fg = "#000000",bg = "#ffffff" ,font =("Times New Roman",25,),relief =SUNKEN,cursor = "hand2",command =login_page)
-Sign_up_btn_2.place(x =90,y =350,width = 200,height = 50,)
+back_2_btn_2= Button(frame_login1, text = "Log In",bd =0,fg = "#000000",bg = "#ffffff" ,font =("Times New Roman",25,),relief =SUNKEN,cursor = "hand2",command =login_page)
+back_2_btn_2.place(x =90,y =350,width = 200,height = 50,)
 
 root.mainloop()
