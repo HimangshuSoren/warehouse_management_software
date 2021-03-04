@@ -90,7 +90,7 @@ LName_Entry.place(x = 35,y = 190,width =300 , height = 35)
 USRName_Label= Label (frame_login,text = "Username",bg = "#ffffff",fg="gray",font =("Goudy old style",15,))
 USRName_Label.place(x = 35,y = 240)
 USRName_Entry= Entry (frame_login,font =("Times New Roman",15,),textvariable =USRName,bg = "#ffffff",cursor = "hand2")
-USRName_Entry.place(x = 35,y = 270,width =300 , height = 35)
+USRName_Entry.place(x =35,y = 270,width =300 , height = 35)
 
 E_mail_Label= Label (frame_login,text = "E-mail",bg = "#ffffff",fg="gray",font =("Goudy old style",15,))
 E_mail_Label.place(x = 35,y = 320)

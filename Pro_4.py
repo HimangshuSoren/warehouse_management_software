@@ -17,9 +17,6 @@ def pre():
     except Exception as e:
         print("s")
 
-
-
-
 def sec_question():
     db1.execute(f"select Username from users where Username = '{name.get()}'")
     f = db1.fetchall()
@@ -52,8 +49,15 @@ def sec_question():
         usr =name.get()
         db1.execute(f"select Security_Question from users where Username = '{usr}' ")
         f = db1.fetchall()
+        g = str(f)
+        rep1  = g.replace("[","")
+        rep2 = rep1.replace("(", "")
+        rep3 = rep2.replace(")", "")
+        rep4 = rep3.replace("]", "")
+        rep5 = rep4.replace("'", "")
+        rep6 = rep5.replace(",", "")
 
-        USRName_Entry3= Label(frame_login,font =("Times New Roman",17,),text =str(f),fg = "dark gray",bd = 1,bg = "#ffffff",cursor = "hand2")
+        USRName_Entry3= Label(frame_login,font =("Times New Roman",17,),text =rep6,fg = "dark gray",bd = 1,bg = "#ffffff",cursor = "hand2")
         USRName_Entry3.place(x = 145,y = 170,width =400 , height = 35)
 
 
