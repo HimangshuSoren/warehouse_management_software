@@ -1,19 +1,18 @@
+# Create Account
 import tkinter
 from tkinter import *
-from tkinter import messagebox,ttk
+from tkinter import messagebox
 from PIL import ImageTk
-import mysql.connector
+import sqlite3
 import os
 
-mydb = mysql.connector.connect(host = "localhost",
-                               user ="root")
+mydb = sqlite3.connect("school_project.db")
 db1 = mydb.cursor()
-db1.execute("use accounts")
 
 def login_page():
     root.destroy()
     try:
-        os.startfile("Pro_1.py")
+        os.startfile("Pro_1.pyw")
     except Exception as e:
         print("s")
 
@@ -29,16 +28,14 @@ def enter_new_usr():
         messagebox.showinfo("error",message="Password doesn't match")
         pass
     else :
-        insert = "INSERT INTO users values (%s,%s,%s,%s,%s,%s)"
-        values = (
-                FName.get()+" "+LName.get(),
-                USRName.get(),
-                E_mail.get(),
-                Pass1.get(),
-                Security_Q.get(),
-                Security_A.get(),
-                )
-        cur.execute(insert,values)
+
+        cur.execute("INSERT INTO users values (:First, :Second, :Third, :Fourth, :Fifth, :Sixth)",{
+                "First":FName.get()+" "+LName.get(),
+                "Second":USRName.get(),
+                "Third":E_mail.get(),
+                "Fourth":Pass1.get(),
+                "Fifth":Security_Q.get(),
+                "Sixth":Security_A.get(),})
         mydb.commit()
         print("Done")
         messagebox.showinfo("Information",message ="Your account has been created now you will be redirected to the Login Page")

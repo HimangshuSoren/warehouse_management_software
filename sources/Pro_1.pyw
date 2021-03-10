@@ -1,37 +1,14 @@
+# Login Page
 import tkinter
 from tkinter import *
 from tkinter import messagebox,ttk
 from PIL import ImageTk
-import mysql.connector
+import sqlite3
 import os
 
-mydb = mysql.connector.connect(host = "localhost",
-                               user ="root",)
+mydb = sqlite3.connect("school_project.db")
 db1 = mydb.cursor()
-db1.execute("show databases")
-list = db1.fetchall()
-if ("accounts",) in list :
-    db1.execute("use accounts")
-    print("Database exists")
-else :
-    db1.execute("create database accounts")
-    db1.execute("use accounts")
 
-db1.execute("show tables")
-tables = db1.fetchall()
-if ("users",) in tables :
-
-    print("Table is present")
-    pass
-else :
-    db1.execute("""create table users ( 
-    Name varchar(100),
-    Username varchar(60) Unique,
-    E_mail varchar(50) Primary key,
-    Password varchar(16),
-    Security_Question varchar(100),
-    Answer varchar(50))""")
-    print("Table is created")
 
 def sign_up_page():
     root.destroy()

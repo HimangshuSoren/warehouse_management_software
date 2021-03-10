@@ -1,3 +1,4 @@
+# Main Project
 import tkinter
 from tkinter import *
 from tkinter import messagebox, ttk
@@ -5,69 +6,18 @@ import datetime
 import mysql.connector
 import os
 from tkcalendar import *
+import sqlite3
 
 now = datetime.datetime.now()
 tm = (now.strftime("%y-%m-%d "))
 dt = (now.strftime("%H:%M:%S"))
-print(dt)
 
 R = 0
 clickedm = 0
 clickede = 0
 
-mydb = mysql.connector.connect(host="localhost",
-                               user="root",
+mydb = sqlite3.connect( 'school_project.db'
                                )
-
-db = mydb.cursor()
-db.execute("show databases")
-lst = db.fetchall()
-if ("school_project",) in lst:
-    db.execute("use school_project")
-    print("Database exists")
-else:
-    db.execute("""create database school_project""")
-    db.execute("use school_project")
-    print("Database created")
-
-db.execute("show tables")
-tbls = db.fetchall()
-if ("inventory",) in tbls:
-
-    print("Table is present")
-    pass
-else:
-    db.execute("""create table inventory ( 
-    Product_ID int(5) primary key,
-    Product_Name varchar(20),
-    Price varchar(10),
-    Quantity int(40),
-    Company varchar(20),
-    Contact varchar(10),
-    Mfg_Date varchar(10),
-    Expiry_Date varchar(10),
-    address varchar(300))""")
-    print("Table is created")
-
-
-db.execute("show tables")
-tbls = db.fetchall()
-if ("sale_history",) in tbls:
-
-    print("Table is present")
-    pass
-else:
-    db.execute("""create table sale_history (
-    Customer_Name varchar(50),
-    Product_Name varchar(20),
-    Product_ID int(5),
-    Quantity varchar(10),
-    Price varchar(10),
-    Contact varchar(10),
-    Date Date,
-    Time varchar(30))""")
-    print("Table is created")
-
 
 def clear_button_2_is_clicked():
     Field.delete(*Field.get_children())
@@ -91,7 +41,6 @@ def search_button_is_clicked():
         for row in rows:
             Field.insert('', END, values=row)
             mydb.commit()
-
 
 def update_2_is_clicked():
     global R
@@ -118,12 +67,9 @@ def update_2_is_clicked():
     MANU_txt.config(state=DISABLED)
     EXPIRY_txt.config(state=DISABLED)
 
-
 def add_btn():
     def add_btn_new():
-        # ID_txt.config(state=NORMAL)
-        # Product_ID.set(num)
-        # ID_txt.config(state=DISABLED)
+        num1 = num
         if Product_ID.get() == 0  :
             ID_txt.config(state=NORMAL)
             Product_ID.set("")
@@ -135,7 +81,6 @@ def add_btn():
             ID_txt.config(state=DISABLED)
             messagebox.showerror("Error", message="Please enter correct details")
         else :
-
             Invalid_Price = Price.get()
             Invalid_No = Contact.get()
             lprice = len(Invalid_Price)
@@ -177,28 +122,28 @@ def add_btn():
                                 rep4 = rep3.replace("[", "")
                                 rep5 = rep4.replace("]", "")
                                 list.append(rep5)
-
                             if Product_ID.get() in list:
                                 messagebox.showerror("Error", message="Record already exists with same ID")
                             else:
+
                                 ADDRESS = ADDRESS_txt.get('1.0', END)
                                 cur = mydb.cursor()
-                                insert = "INSERT INTO Inventory values (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-                                values = (num,
-                                          Product_Name.get(),
-                                          Price.get() + " Rs",
-                                          Quantity.get(),
-                                          Company.get(),
-                                          Contact.get(),
-                                          Manufacture.get(),
-                                          Expiry.get(),
-                                          ADDRESS.rstrip()
-                                          )
-                                cur.execute(insert, values)
+                                price = Price.get()+" Rs"
+                                cur.execute("INSERT INTO Inventory values (:First, :Second, :Third, :Fourth, :Fifth, :Sixth, :Seventh, :Eighth, :Nineth)",
+                                          {
+                                          "First": int(num),
+                                          "Second": Product_Name.get(),
+                                          "Third": price,
+                                          "Fourth": Quantity.get(),
+                                          "Fifth": Company.get(),
+                                          "Sixth": Contact.get(),
+                                          "Seventh": Manufacture.get(),
+                                          "Eighth": Expiry.get(),
+                                          "Nineth": ADDRESS.rstrip() })
                                 mydb.commit()
 
                                 cur = mydb.cursor()
-                                select = "select * from inventory"
+                                select = "select * from inventory order by Product_ID"
                                 cur.execute(select)
                                 rows = cur.fetchall()
                                 if len(rows) != 0:
@@ -219,18 +164,6 @@ def add_btn():
     s = str(f)
     rep1 = s.replace("[(", "")
     rep2 = rep1.replace(",)]", "")
-
-    # if int(rep2) > num and (num,) not in PID and int(ID_txt.get()) == num :
-    #         answer = messagebox.askquestion(message = "A new row will be created")
-    #         if answer == 'yes' :
-    #             num = num
-    #             add_btn_new()
-    #             # break
-    #         else :
-    #             pass
-
-
-
     if int(rep2) < num :
             num += 1
             add_btn_new()
@@ -242,28 +175,21 @@ def add_btn():
                         num = num
                         add_btn_new()
                         break
-
             if int(rep2) < num:
                 num += 1
             elif int(rep2) == num :
                 num = int(rep2) + 1
                 add_btn_new()
 
-
-
-
-
-
 def search_all_bth():
     cur = mydb.cursor()
-    select = "select * from inventory "
+    select = "select * from inventory order by Product_ID "
     cur.execute(select)
     rows = cur.fetchall()
     Field.delete(*Field.get_children())
     for row in rows:
         Field.insert('', END, values=row)
         mydb.commit()
-
 
 def delete_button_is_clicked():
     cursor_row = Field.focus()
@@ -274,8 +200,6 @@ def delete_button_is_clicked():
     cur.execute(select)
     mydb.commit()
     search_all_bth()
-
-
 
 def selling():
 
@@ -347,17 +271,18 @@ def selling():
                 messagebox.showerror("Error", message="Please Enter the correct name", parent=rot)
             else :
                 cur = mydb.cursor()
-                insert = "INSERT INTO sale_history values (%s,%s,%s,%s,%s,%s,%s,%s)"
-                values = (CUST_NAME_TXT.get(),
-                          row[1],
-                          row[0],
-                          QTY_TXT.get(),
-                          AMT_TXT2.get()+" Rs",
-                          PHONE_TXT.get(),
-                          tm,
-                          dt
-                          )
-                cur.execute(insert, values)
+
+                cur.execute( "INSERT INTO sale_history values (:First, :Second, :Third, :Fourth, :Fifth, :Sixth, :Seventh, :Eighth)",
+                             {"First":CUST_NAME_TXT.get(),
+                          "Second":row[1],
+                          "Third":row[0],
+                          "Fourth":QTY_TXT.get(),
+                          "Fifth":AMT_TXT2.get()+" Rs",
+                          "Sixth":PHONE_TXT.get(),
+                          "Seventh":tm,
+                          "Eighth":dt
+                          }
+                )
                 cur.execute(f"update inventory set Quantity = Quantity - {QTY_TXT.get()} where Product_ID = {row[0]}")
                 mydb.commit()
                 messagebox.showinfo("Done",message = "Selling Successful",parent = rot)
@@ -466,8 +391,6 @@ def selling():
 
         AD_his_btn.place(x=123, y=479, width=230, height=40)
 
-
-
 def clear_button_is_clicked():
     global R
     R = 0
@@ -513,31 +436,21 @@ def update_button_is_clicked():
     else:
         ADDRESS = ADDRESS_txt.get('1.0', END)
         cur = mydb.cursor()
-        insert = '''UPDATE Inventory set
-        Product_Name=%s,
-        Price=%s,
-        Quantity = %s,
-        Company=%s,
-        Contact=%s,
-        Mfg_Date=%s,
-        Expiry_Date=%s,
-        address=%s 
-        where Product_ID=%s '''
-        values = (
-            Product_Name.get(),
-            Price.get() + " Rs",
-            Quantity.get(),
-            Company.get(),
-            Contact.get(),
-            Manufacture.get(),
-            Expiry.get(),
-            ADDRESS.rstrip(),
-            Product_ID.get()
-        )
-        cur.execute(insert, values)
+        cur.execute(
+            "Update inventory set Product_Name=:Second, Price=:Third, Quantity=:Fourth, Company=:Fifth, Contact=:Sixth, Mfg_Date=:Seventh, Expiry_Date=:Eighth, address=:Nineth where Product_ID = :First",
+            {
+                "First": Product_ID.get(),
+                "Second": Product_Name.get(),
+                "Third": Price.get() + " Rs" ,
+                "Fourth": Quantity.get(),
+                "Fifth": Company.get(),
+                "Sixth": Contact.get(),
+                "Seventh": Manufacture.get(),
+                "Eighth": Expiry.get(),
+                "Nineth": ADDRESS.rstrip()})
         mydb.commit()
         cur = mydb.cursor()
-        select = "select * from inventory"
+        select = "select * from inventory order by Product_ID"
         cur.execute(select)
         rows = cur.fetchall()
         if len(rows) != 0:
@@ -546,7 +459,6 @@ def update_button_is_clicked():
                 Field.insert('', END, values=row)
                 mydb.commit()
 
-
 def logout_button_is_clicked():
     root.destroy()
     try:
@@ -554,14 +466,12 @@ def logout_button_is_clicked():
     except Exception as e:
         print("s")
 
-
 def sell():
     try:
         os.startfile("Pro_5.pyw")
 
     except Exception as e:
         print("s")
-
 
 def Manu_click(event):
     def select_date_1():
@@ -614,7 +524,6 @@ def Expiry_click():
     selecting_btn = Button(rooot, text="Select", font=("Comic Sans MS", 12, "bold"), bd=1,
                            bg="#ffffff", fg="#000000", relief=SUNKEN, command=select_date_1)
     selecting_btn.pack(expand=TRUE, fill=BOTH)
-
 
 def history_button_clicked():
     try:
@@ -732,8 +641,6 @@ def product_details():
         label21 = Label(pop, text=(f":"), bg="#ffffff", anchor=W,
                         font=("Times New Roman", 22, "bold"))
         label21.grid(row=8, column=1, sticky="w", )
-
-
 
 root = tkinter.Tk()
 root.title("Warehouse Inventory Sales Purchase Management System  ")

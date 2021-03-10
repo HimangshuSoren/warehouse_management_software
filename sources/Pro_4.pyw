@@ -1,19 +1,19 @@
+# Forgot Password
 import tkinter
 from tkinter import *
 from tkinter import messagebox,ttk
 from PIL import ImageTk
-import mysql.connector
+import sqlite3
 import os
 
-mydb = mysql.connector.connect(host = "localhost",
-                               user ="root")
+mydb = sqlite3.connect("school_project.db")
 db1 = mydb.cursor()
-db1.execute("use Accounts")
+
 
 def pre():
     root.destroy()
     try:
-        os.startfile("Pro_1.py")
+        os.startfile("Pro_1.pyw")
     except Exception as e:
         print("s")
 
@@ -72,18 +72,12 @@ def sec_question():
         command =check_answer)
         next_btn_2.place(x =360,y =270,width = 190,height = 40 )
 
-
 def login_page():
     root.destroy()
     try:
-        os.startfile("Pro_1.py")
+        os.startfile("Pro_1.pyw")
     except Exception as e:
         print("s")
-
-
-
-
-
 
 def next_btn_f():
     def insert():
@@ -127,7 +121,6 @@ def next_btn_f():
     canc_btn = Button(frame_login2, text="Cancel", bd=0, fg="#ffffff", bg="#00d30b",
                       font=("Times New Roman", 20, "bold"), relief=SUNKEN, cursor="hand2", command=pre)
     canc_btn.place(x=153, y=300, width=190, height=40)
-
 
 root = tkinter.Tk()
 root.title("Warehouse Inventory Sales Purchase Management System  ")

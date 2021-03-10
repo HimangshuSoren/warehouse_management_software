@@ -1,22 +1,12 @@
+# Sale History
 import tkinter
 from tkinter import *
-from tkinter import messagebox, ttk
-import mysql.connector
-import os
+from tkinter import ttk
+import sqlite3
 #_______________________________________________________________________________________________________________________
-mydb = mysql.connector.connect(host="localhost",
-                               user="root",
-                               )
+mydb = sqlite3.connect("school_project.db")
 db = mydb.cursor()
-db.execute("show databases")
-lst = db.fetchall()
-if ("school_project",) in lst:
-    db.execute("use school_project")
-    print("Database exists")
-else:
-    db.execute("""create database school_project""")
-    db.execute("use school_project")
-    print("Database created")
+
 
 def search_button_is_clicked():
     c = str(Entry1.get())
@@ -66,9 +56,6 @@ def ext_1():
 def clear_button_2_is_clicked():
     Field.delete(*Field.get_children())
 
-
-
-
 #_______________________________________________________________________________________________________________________
 root = tkinter.Tk()
 root.title("   Sale History ")
@@ -97,9 +84,6 @@ title.pack(expand=True, fil="x")
 
 Main_Frame = Frame(root, bd=1, relief=RIDGE, bg="#ffffff")
 Main_Frame.place(x=0, y=60, width=1056, height=500)
-
-
-
 
 Searching_Frame = Frame(root, bd=1, relief=RIDGE)
 Searching_Frame.place(x=0, y=60, width=1056, height=54)
@@ -138,7 +122,6 @@ Ext= Button(Searching_Frame, width=10, text="     Exit     ", font=("Comic Sans 
                                                                                      sticky="e")
 
 
-
 Database_Window = Frame(root, bd=1, relief=RIDGE, bg="#ffffff")
 Database_Window.place(x=0, y=115, width=1056, height=370)
 
@@ -173,16 +156,6 @@ Field.pack(expand=True,fill = BOTH)
 
 button_frame2 = Frame(root, bd=2, relief=RIDGE, bg="#00a6ff")
 button_frame2.place(x=10, y=495, width=1030, height=54, )
-
-# *********************************************** Buttons (For Frame 7)***************************
-
-# Show_button = Button(button_frame2, width=10, text="Show", font=("Comic Sans MS", 12, "bold"), bd=1 / 2, bg="#ffffff",
-#                      fg="#000000",
-#                      relief=SUNKEN,).grid(row=0, column=0, padx=(10, 0), pady=7)
-
-# Update_button = Button(button_frame2, width=10, text="Update", font=("Comic Sans MS", 12, "bold"), bd=1 / 2,
-#                        bg="#ffffff", fg="#000000",
-#                        relief=SUNKEN,).grid(row=0, column=1, padx=10, pady=7)
 
 delete_button = Button(button_frame2, width=10, text="Delete", font=("Comic Sans MS", 12, "bold"), bd=1 / 2,
                        bg="#ffffff", fg="#000000", relief=SUNKEN,command = delete_history).grid(row=0,
